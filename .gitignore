@@ -1,8 +1,8 @@
 node_modules/
 _backup/
 .idea/
-dist/
 misc/
+dist/
 
 src/.idea
 install.bat
