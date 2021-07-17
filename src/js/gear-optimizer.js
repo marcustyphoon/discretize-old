@@ -6,6 +6,9 @@
 // eslint-disable-next-line no-unused-vars
 const Optimizer = function ($) {
 
+  let skippedCount = 0;
+  let calcCount = 0;
+
   /**
    * ------------------------------------------------------------------------
    * Constants
@@ -1222,6 +1225,10 @@ const Optimizer = function ($) {
         }
       );
 
+      settings.condiCache = new Map();
+      skippedCount = 0;
+      calcCount = 0;
+
       Object.freeze(_optimizer.settings);
     }
 
@@ -1317,6 +1324,10 @@ const Optimizer = function ($) {
 
         const _optimizer = this;
         const { settings } = _optimizer;
+
+        console.log(settings.condiCache);
+        console.log(skippedCount);
+        console.log(calcCount);
 
         // display indicator line under the results identical to the best
         const bestValue = _optimizer.list.children().eq(0)
@@ -1871,65 +1882,76 @@ const Optimizer = function ($) {
     _character.attributes['Effective Power'] *= additivePowerModis;
 
     // Conditions (skipped if there are no relevant conditions)
+    let conditionScore = 0;
     if (alwaysCalculateAll || settings.relevantConditions.length) {
+      const UNIQUE_CONDI_ID
+        = _character.attributes['Expertise'] + _character.attributes['Condition Damage'] * 10000;
 
-      for (const condition of alwaysCalculateAll
-        ? Object.keys(Condition)
-        : settings.relevantConditions) {
+      if (!alwaysCalculateAll && settings.condiCache.has(UNIQUE_CONDI_ID)) {
+        conditionScore = settings.condiCache.get(UNIQUE_CONDI_ID);
+        skippedCount++;
 
-        _character.attributes[condition + ' Damage']
-          = (Condition[condition].factor * _character.attributes['Condition Damage'])
-          + Condition[condition].baseDamage;
-      }
+      } else {
+        calcCount++;
+        for (const condition of alwaysCalculateAll
+          ? Object.keys(Condition)
+          : settings.relevantConditions) {
 
-      if (
-        _multipliers
-        && (_multipliers['Effective Condition Damage']
-          || _multipliers['add: Effective Condition Damage'])
-      ) {
-        if (_multipliers['add: Effective Condition Damage']) {
-          // Sums up all additive condition damage modifiers
-          let additiveCondiDmg = 1.0;
-          for (const multiplier of _multipliers['add: Effective Condition Damage']) {
-            additiveCondiDmg += multiplier;
-          }
-          // multiply the sum of all additive modifiers on the characters condition ticks
-          for (const conditionDamage of Attributes.CONDITION_DAMAGE) {
-            _character.attributes[conditionDamage] *= additiveCondiDmg;
-          }
+          _character.attributes[condition + ' Damage']
+            = (Condition[condition].factor * _character.attributes['Condition Damage'])
+            + Condition[condition].baseDamage;
         }
 
-        if (_multipliers['Effective Condition Damage']) {
-          for (const multiplier of _multipliers['Effective Condition Damage']) {
+        if (
+          _multipliers
+          && (_multipliers['Effective Condition Damage']
+            || _multipliers['add: Effective Condition Damage'])
+        ) {
+          if (_multipliers['add: Effective Condition Damage']) {
+            // Sums up all additive condition damage modifiers
+            let additiveCondiDmg = 1.0;
+            for (const multiplier of _multipliers['add: Effective Condition Damage']) {
+              additiveCondiDmg += multiplier;
+            }
+            // multiply the sum of all additive modifiers on the characters condition ticks
             for (const conditionDamage of Attributes.CONDITION_DAMAGE) {
-              _character.attributes[conditionDamage] *= 1.0 + multiplier;
+              _character.attributes[conditionDamage] *= additiveCondiDmg;
+            }
+          }
+
+          if (_multipliers['Effective Condition Damage']) {
+            for (const multiplier of _multipliers['Effective Condition Damage']) {
+              for (const conditionDamage of Attributes.CONDITION_DAMAGE) {
+                _character.attributes[conditionDamage] *= 1.0 + multiplier;
+              }
             }
           }
         }
-      }
-      $.each(_multipliers, function (attribute, multipliers) {
-        if (Attributes.CONDITION_DAMAGE.includes(attribute) && _character.attributes[attribute]) {
-          for (const multiplier of multipliers) {
-            _character.attributes[attribute] *= 1.0 + multiplier;
+        $.each(_multipliers, function (attribute, multipliers) {
+          if (Attributes.CONDITION_DAMAGE.includes(attribute) && _character.attributes[attribute]) {
+            for (const multiplier of multipliers) {
+              _character.attributes[attribute] *= 1.0 + multiplier;
+            }
           }
-        }
-      });
+        });
+
+        $.each(settings.distribution, function (key, percentage) {
+          if (key !== 'Power') {
+            const duration = 1 + Math.min(((_character.attributes[key + ' Duration'] || 0)
+              + _character.attributes['Condition Duration']) / 100, 1);
+            conditionScore
+              += percentage * duration
+              * (_character.attributes[key + ' Damage'] / Condition[key].baseDamage);
+          }
+        });
+        settings.condiCache.set(UNIQUE_CONDI_ID, conditionScore);
+      }
     }
 
     // Calculate scores
-    _character.attributes['Damage'] = 0;
-    $.each(settings.distribution, function (key, percentage) {
-      if (key === 'Power') {
-        _character.attributes['Damage']
-          += percentage * (_character.attributes['Effective Power'] / 1025);
-      } else {
-        const duration = 1 + Math.min(((_character.attributes[key + ' Duration'] || 0)
-          + _character.attributes['Condition Duration']) / 100, 1);
-        _character.attributes['Damage']
-          += percentage * duration
-          * (_character.attributes[key + ' Damage'] / Condition[key].baseDamage);
-      }
-    });
+    _character.attributes['Damage']
+      = settings.distribution['Power'] * (_character.attributes['Effective Power'] / 1025)
+      + conditionScore;
 
     _character.attributes['Survivability'] = _character.attributes['Effective Health'] / 1967;
     _character.attributes['Healing'] = _character.attributes['Effective Healing'];

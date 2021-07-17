@@ -306,8 +306,8 @@ const gojs = function () {
 			.on('error', swallowError)
 		.pipe(concat(dist.gojs))
 			.on('error', swallowError)
-		.pipe(uglify())
-			.on('error', swallowError)
+		// .pipe(uglify())
+		// 	.on('error', swallowError)
 		.pipe(gulp.dest(base.assets));
 };
 
