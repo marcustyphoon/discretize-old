@@ -54,26 +54,7 @@ export const gearOptimizerSlice = createSlice({
     signetOfMercy: false,
     signetOfWrath: false,
     exposed: false,
-    lightArmor: false,
-    list: [
-      {
-        id: 1,
-        value: ['hi', 1, 2, 3, 4]
-      },
-      {
-        id: 2,
-        value: ['hi', 1, 2, 3, 4]
-      },
-      {
-        id: 3,
-        value: ['hi', 1, 2, 3, 4]
-      },
-      {
-        id: 4,
-        value: ['hi', 1, 2, 3, 4]
-      }
-    ],
-    calculating: false
+    lightArmor: false
   },
   reducers: {
     changeProfession: (state, action) => {
@@ -136,14 +117,6 @@ export const gearOptimizerSlice = createSlice({
     },
     removeModifierWithSource: (state, action) => {
       state.modifiers = state.modifiers.filter((m) => m.source !== action.payload);
-    },
-    changeCalculating: (state, action) => {
-      state.calculating = action.payload;
-    },
-    changeList: (state, action) => {
-      console.log('changed list');
-      state.list = action.payload;
-      console.log('list length:', state.list.length);
     }
   }
 });
@@ -159,7 +132,6 @@ export const getDistributionNew = (state) => state.gearOptimizer.distribution.va
 export const getTextBoxes = (state) => state.gearOptimizer.distribution.textBoxes;
 export const getSkills = (state) => state.gearOptimizer.skills;
 export const getModifiers = (state) => state.gearOptimizer.modifiers;
-export const getList = (state) => state.gearOptimizer.list;
 
 export const {
   changeProfession,
@@ -177,9 +149,7 @@ export const {
   addModifier,
   removeModifier,
   removeTraitModifierWithGW2id,
-  removeModifierWithSource,
-  changeCalculating,
-  changeList
+  removeModifierWithSource
 } = gearOptimizerSlice.actions;
 
 export default gearOptimizerSlice.reducer;
