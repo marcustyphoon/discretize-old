@@ -816,14 +816,16 @@ function updateAttributesFast (_character, skipValidation = false) {
       const powerDamageScore = calcPower(_character, multipliers);
 
       // cache condi result based on cdmg and expertise
-      let condiDamageScore = 0;
-      if (settings.relevantConditions.length) {
-        const CONDI_CACHE_ID = attributes['Expertise'] + attributes['Condition Damage'] * 10000;
-        condiDamageScore
-          = settings.condiResultCache.get(CONDI_CACHE_ID)
-            || calcCondi(_character, multipliers, settings.relevantConditions);
-        settings.condiResultCache.set(CONDI_CACHE_ID, condiDamageScore);
-      }
+      // let condiDamageScore = 0;
+      // if (settings.relevantConditions.length) {
+      //   const CONDI_CACHE_ID = attributes['Expertise'] + attributes['Condition Damage'] * 10000;
+      //   condiDamageScore
+      //     = settings.condiResultCache.get(CONDI_CACHE_ID)
+      //       || calcCondi(_character, multipliers, settings.relevantConditions);
+      //   settings.condiResultCache.set(CONDI_CACHE_ID, condiDamageScore);
+      // }
+      let condiDamageScore = calcCondi(_character, multipliers, settings.relevantConditions);
+
       attributes['Damage'] = powerDamageScore + condiDamageScore;
       break;
     case 'Survivability':
