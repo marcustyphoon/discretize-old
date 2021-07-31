@@ -1,5 +1,7 @@
+/* eslint-disable complexity */
+/* eslint-disable max-depth */
 
-// eslint-disable-next-line no-unused-vars, max-len
+// eslint-disable-next-line no-unused-vars
 import { Affix, Item, Slots, ForcedSlots, Health, Defense, Classes, Condition, Attributes, MAX_INFUSIONS, INFUSION_BONUS } from './gw2-data.js';
 
 /**
@@ -47,7 +49,7 @@ let isChanged = true;
  *
  * @returns {Object} settings - parsed settings object
  */
-export function setup (input) {
+export function setup(input) {
   worstScore = undefined;
   list = [];
 
@@ -73,6 +75,7 @@ export function setup (input) {
   for (const attribute of Attributes.PRIMARY) {
     settings.baseAttributes[attribute] = 1000;
   }
+
   for (const attribute of Attributes.SECONDARY) {
     settings.baseAttributes[attribute] = 0;
   }
@@ -100,7 +103,7 @@ export function setup (input) {
   let targetEffectiveConditionDamage = 0;
   let targetEffectivePower = 0;
 
-  const validMultiplierStats = [
+  const validMultiplierStats = new Set([
     ...Attributes.EFFECTIVE,
     'Effective Condition Damage',
 
@@ -113,31 +116,32 @@ export function setup (input) {
     'target: Effective Power',
     'Critical Damage',
     ...Attributes.CONDITION_DAMAGE
-  ];
-  const validFlatStats = [
+  ]);
+  const validFlatStats = new Set([
     ...Attributes.PRIMARY,
     ...Attributes.SECONDARY,
     ...Attributes.DERIVED,
     ...Attributes.BOON_DURATION,
     ...Attributes.CONDITION_DURATION
-  ];
-  const validBuffStats = [
+  ]);
+  const validBuffStats = new Set([
     ...Attributes.PRIMARY,
     ...Attributes.SECONDARY,
     ...Attributes.DERIVED,
     ...Attributes.BOON_DURATION,
     ...Attributes.CONDITION_DURATION
-  ];
-  const validConvertStats = [
+  ]);
+  const validConvertStats = new Set([
     ...Attributes.PRIMARY,
     ...Attributes.SECONDARY
-  ];
+  ]);
 
   modifiersInput = modifiersInput || [];
   for (const modifiers of modifiersInput) {
     if (!modifiers) {
       continue;
     }
+
     for (const [type, modifier] of Object.entries(modifiers)) {
       if (type && modifier !== undefined) {
         if (type === 'bountiful-maintenance-oil') {
@@ -147,7 +151,7 @@ export function setup (input) {
             if (attribute && value) {
               switch (type) {
                 case 'multiplier':
-                  if (validMultiplierStats.includes(attribute)) {
+                  if (validMultiplierStats.has(attribute)) {
                     if (attribute === 'add: Effective Condition Damage') {
                       addEffectiveConditionDamage += value;
                     } else if (attribute === 'add: Effective Power') {
@@ -167,9 +171,10 @@ export function setup (input) {
                       + 'effective attributes, not ' + attribute
                     );
                   }
+
                   break;
                 case 'flat':
-                  if (validFlatStats.includes(attribute)) {
+                  if (validFlatStats.has(attribute)) {
                     settings.baseAttributes[attribute]
                     = (settings.baseAttributes[attribute] || 0) + value;
                   } else {
@@ -178,9 +183,10 @@ export function setup (input) {
                       + 'derived attributes, not ' + attribute
                     );
                   }
+
                   break;
                 case 'buff':
-                  if (validBuffStats.includes(attribute)) {
+                  if (validBuffStats.has(attribute)) {
                     settings.modifiers['buff'][attribute]
                     = (settings.modifiers['buff'][attribute] || 0) + value;
                   } else {
@@ -189,9 +195,10 @@ export function setup (input) {
                       + 'derived attributes, not ' + attribute
                     );
                   }
+
                   break;
                 case 'convert':
-                  if (validConvertStats.includes(attribute)) {
+                  if (validConvertStats.has(attribute)) {
                     if (!settings.modifiers['convert'][attribute]) {
                       settings.modifiers['convert'][attribute] = {};
                     }
@@ -205,6 +212,7 @@ export function setup (input) {
                       'Conversions can only modify primary or secondary attributes, not '
                       + attribute);
                   }
+
                   break;
                 // no default
               }
@@ -214,6 +222,7 @@ export function setup (input) {
       }
     }
   }
+
   settings.modifiers['multiplier']['Effective Condition Damage']
     *= (1 + addEffectiveConditionDamage);
   settings.modifiers['multiplier']['Effective Power']
@@ -250,15 +259,15 @@ export function setup (input) {
 
   /* Infusions */
 
-  const validInfusionStats = [
+  const validInfusionStats = new Set([
     ...Attributes.PRIMARY,
     ...Attributes.SECONDARY,
     ...Attributes.DERIVED
-  ];
+  ]);
 
   let activeInfusions = 0;
   if (primaryInfusionInput && primaryInfusionInput !== 'None') {
-    if (validInfusionStats.includes(primaryInfusionInput)) {
+    if (validInfusionStats.has(primaryInfusionInput)) {
       activeInfusions++;
       settings.primaryInfusion = primaryInfusionInput;
       settings.primaryMaxInfusions = primaryMaxInfusionsInput;
@@ -268,8 +277,9 @@ export function setup (input) {
         + primaryInfusionInput);
     }
   }
+
   if (secondaryInfusionInput && secondaryInfusionInput !== 'None' && secondaryInfusionInput !== primaryInfusionInput) {
-    if (validInfusionStats.includes(secondaryInfusionInput)) {
+    if (validInfusionStats.has(secondaryInfusionInput)) {
       activeInfusions++;
       if (activeInfusions === 2) {
         settings.secondaryInfusion = secondaryInfusionInput;
@@ -304,11 +314,13 @@ export function setup (input) {
       }
     // no default
   }
+
   if (applyInfusions[infusionMode] === undefined) {
     throw new Error(
       'Error: optimizer selected invalid infusion calculation mode: ' + infusionMode
     );
   }
+
   settings.infusionMode = infusionMode;
 
   /* Equipment */
@@ -317,29 +329,32 @@ export function setup (input) {
 
   // affixesArray: valid affixes for each slot, taking forced slots into account
   // e.g. [[Berserker, Assassin], [Assassin], [Berserker, Assassin]...]
+  // eslint-disable-next-line unicorn/no-new-array
   settings.affixesArray = new Array(settings.slots.length).fill(settings.affixes);
 
   settings.forcedArmor = false;
   settings.forcedRing = false;
   settings.forcedAcc = false;
   settings.forcedWep = false;
-  for (let i = 0; i < settings.forcedAffixes.length; i++) {
-    const inputValue = settings.forcedAffixes[i];
+  for (let index = 0; index < settings.forcedAffixes.length; index++) {
+    const inputValue = settings.forcedAffixes[index];
     if (!inputValue) {
       continue;
     }
+
     for (const affix of settings.affixes) {
       if (affix.toLowerCase().startsWith(inputValue.toLowerCase())) {
-        settings.affixesArray[i] = [affix];
-        if (['shld', 'glov', 'boot'].includes(ForcedSlots[i])) {
+        settings.affixesArray[index] = [affix];
+        if (['shld', 'glov', 'boot'].includes(ForcedSlots[index])) {
           settings.forcedArmor = true;
-        } else if (['rng1', 'rng2'].includes(ForcedSlots[i])) {
+        } else if (['rng1', 'rng2'].includes(ForcedSlots[index])) {
           settings.forcedRing = true;
-        } else if (['acc1', 'acc2'].includes(ForcedSlots[i])) {
+        } else if (['acc1', 'acc2'].includes(ForcedSlots[index])) {
           settings.forcedAcc = true;
-        } else if (['wep1', 'wep2'].includes(ForcedSlots[i])) {
+        } else if (['wep1', 'wep2'].includes(ForcedSlots[index])) {
           settings.forcedWep = true;
         }
+
         break;
       }
     }
@@ -353,9 +368,12 @@ export function setup (input) {
   // [grie vipe sini] legs
   // ...
   settings.affixesArray = settings.affixesArray.map((affixes, slotindex) => {
-    if (affixes.length === 1) return affixes;
-    return affixes.reduce((newAffixes, affix, i) => {
-      newAffixes[(i + slotindex) % affixes.length] = affix;
+    if (affixes.length === 1) {
+      return affixes;
+    }
+
+    return affixes.reduce((newAffixes, affix, index) => {
+      newAffixes[(index + slotindex) % affixes.length] = affix;
       return newAffixes;
     }, []);
   });
@@ -364,8 +382,8 @@ export function setup (input) {
   // like affixesArray, but each entry is an array of arrays of stats given by that piece with
   // that affix
   // e.g. berserker helm -> [[Power, 63],[Precision, 45],[Ferocity, 45]]
-  settings.affixStatsArray = settings.affixesArray.map((possibleAffixes, slotindex) => {
-    return possibleAffixes.map(affix => {
+  settings.affixStatsArray = settings.affixesArray.map((possibleAffixes, slotindex) =>
+    possibleAffixes.map(affix => {
       const statTotals = {};
       const bonuses = Object.entries(settings.slots[slotindex].item[Affix[affix].type]);
       for (const [type, bonus] of bonuses) {
@@ -373,9 +391,9 @@ export function setup (input) {
           statTotals[stat] = (statTotals[stat] || 0) + bonus;
         }
       }
+
       return Object.entries(statTotals);
-    });
-  });
+    }));
 
   // used to keep the progress counter in sync when skipping identical gear combinations.
   settings.runsAfterThisSlot = [];
@@ -384,8 +402,10 @@ export function setup (input) {
     for (let j = i; j < settings.affixesArray.length; j++) {
       counter *= settings.affixesArray[j].length;
     }
+
     settings.runsAfterThisSlot.push(counter);
   }
+
   settings.runsAfterThisSlot.push(1);
 
   // const freeSlots = settings.weapontype === 'Dual wield' ? 5 : 6;
@@ -425,20 +445,22 @@ export function setup (input) {
  * @yields {number} result.value.isChanged - true if list has been mutated
  * @yields {number} result.value.percent - the progress percentage
  */
-export function * calculate (settings) {
-  if (!settings.affixes.length) {
+export function * calculate(settings) {
+  if (settings.affixes.length === 0) {
     return {
       isChanged: true,
       percent: 100,
       newList: []
     };
   }
+
   applyInfusionsFunction = applyInfusions[settings.infusionMode];
 
   let calculationTotal = 1;
   for (let i = 0; i < settings.affixesArray.length; i++) {
     calculationTotal *= settings.affixesArray[i].length;
   }
+
   let calculationRuns = 0;
 
   settings.condiResultCache = new Map();
@@ -451,7 +473,7 @@ export function * calculate (settings) {
   let UPDATE_MS = 90;
   let cycles = 0;
   isChanged = true;
-  while (calculationQueue.length) {
+  while (calculationQueue.length > 0) {
     cycles++;
 
     // pause to update UI at around 15 frames per second
@@ -459,7 +481,7 @@ export function * calculate (settings) {
       yield {
         isChanged,
         percent: Math.floor((calculationRuns * 100) / calculationTotal),
-        newList: isChanged ? list.slice() : null
+        newList: isChanged ? [...list] : null
       };
       isChanged = false;
       UPDATE_MS = 55;
@@ -499,8 +521,8 @@ export function * calculate (settings) {
 
     // Recycle for Affix 0, clone for 1+
     for (let i = 1; i < settings.affixesArray[nextSlot].length; i++) {
-      const newGear = gear.slice();
-      const newGearStats = Object.assign({}, gearStats);
+      const newGear = [...gear];
+      const newGearStats = { ...gearStats };
 
       const currentAffix = settings.affixesArray[nextSlot][i];
       newGear[nextSlot] = currentAffix;
@@ -513,6 +535,7 @@ export function * calculate (settings) {
       calculationQueue.push(newGear);
       calculationStatsQueue.push(newGearStats);
     }
+
     const currentAffix = settings.affixesArray[nextSlot][0];
     gear[nextSlot] = currentAffix;
 
@@ -524,14 +547,15 @@ export function * calculate (settings) {
     calculationQueue.push(gear);
     calculationStatsQueue.push(gearStats);
   }
+
   return {
     isChanged,
     percent: Math.floor((calculationRuns * 100) / calculationTotal),
-    newList: list.slice()
+    newList: [...list]
   };
 }
 
-function testCharacter (gear, gearStats, settings) {
+function testCharacter(gear, gearStats, settings) {
   if (!gear) {
     return;
   }
@@ -542,7 +566,7 @@ function testCharacter (gear, gearStats, settings) {
     gearStats, // passed by reference
     attributes: null,
     valid: true,
-    baseAttributes: Object.assign({}, settings.baseAttributes)
+    baseAttributes: { ...settings.baseAttributes }
   };
 
   // apply gear
@@ -555,7 +579,7 @@ function testCharacter (gear, gearStats, settings) {
   applyInfusionsFunction(character);
 }
 
-function addBaseStats (character, stat, amount) {
+function addBaseStats(character, stat, amount) {
   character.baseAttributes[stat] = (character.baseAttributes[stat] || 0) + amount;
 }
 
@@ -607,11 +631,11 @@ applyInfusions['Secondary'] = function (character) {
   const { settings } = character;
 
   const testInfusionUsefulness = function () {
-    const temp = clone(character);
-    addBaseStats(temp, settings.primaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
-    addBaseStats(temp, settings.secondaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
-    updateAttributesFast(temp, true);
-    return temp.attributes[settings.rankby] > worstScore;
+    const testCharacter = clone(character);
+    addBaseStats(testCharacter, settings.primaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
+    addBaseStats(testCharacter, settings.secondaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
+    updateAttributesFast(testCharacter, true);
+    return testCharacter.attributes[settings.rankby] > worstScore;
   };
 
   if (!worstScore || testInfusionUsefulness()) {
@@ -620,25 +644,26 @@ applyInfusions['Secondary'] = function (character) {
     let primaryCount = settings.primaryMaxInfusions;
     let secondaryCount = MAX_INFUSIONS - primaryCount;
     while (secondaryCount <= settings.secondaryMaxInfusions) {
-      const temp = clone(character);
+      const testCharacter = clone(character);
       addBaseStats(
-        temp,
+        testCharacter,
         settings.primaryInfusion,
         primaryCount * INFUSION_BONUS);
       addBaseStats(
-        temp,
+        testCharacter,
         settings.secondaryInfusion,
         secondaryCount * INFUSION_BONUS
       );
-      updateAttributesFast(temp);
-      if (temp.valid && temp.attributes[settings.rankby] !== previousResult) {
-        temp.infusions = {
+      updateAttributesFast(testCharacter);
+      if (testCharacter.valid && testCharacter.attributes[settings.rankby] !== previousResult) {
+        testCharacter.infusions = {
           [settings.primaryInfusion]: primaryCount,
           [settings.secondaryInfusion]: secondaryCount
         };
-        insertCharacter(temp);
-        previousResult = temp.attributes[settings.rankby];
+        insertCharacter(testCharacter);
+        previousResult = testCharacter.attributes[settings.rankby];
       }
+
       primaryCount--;
       secondaryCount++;
     }
@@ -650,11 +675,11 @@ applyInfusions['SecondaryNoDuplicates'] = function (character) {
   const { settings } = character;
 
   const testInfusionUsefulness = function () {
-    const temp = clone(character);
-    addBaseStats(temp, settings.primaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
-    addBaseStats(temp, settings.secondaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
-    updateAttributesFast(temp, true);
-    return temp.attributes[settings.rankby] > worstScore;
+    const testCharacter = clone(character);
+    addBaseStats(testCharacter, settings.primaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
+    addBaseStats(testCharacter, settings.secondaryInfusion, MAX_INFUSIONS * INFUSION_BONUS);
+    updateAttributesFast(testCharacter, true);
+    return testCharacter.attributes[settings.rankby] > worstScore;
   };
 
   if (!worstScore || testInfusionUsefulness()) {
@@ -663,30 +688,32 @@ applyInfusions['SecondaryNoDuplicates'] = function (character) {
     let primaryCount = settings.primaryMaxInfusions;
     let secondaryCount = MAX_INFUSIONS - primaryCount;
     while (secondaryCount <= settings.secondaryMaxInfusions) {
-      const temp = clone(character);
+      const testCharacter = clone(character);
       addBaseStats(
-        temp,
+        testCharacter,
         settings.primaryInfusion,
         primaryCount * INFUSION_BONUS
       );
       addBaseStats(
-        temp,
+        testCharacter,
         settings.secondaryInfusion,
         secondaryCount * INFUSION_BONUS
       );
-      updateAttributesFast(temp);
-      if (temp.valid) {
-        temp.infusions = {
+      updateAttributesFast(testCharacter);
+      if (testCharacter.valid) {
+        testCharacter.infusions = {
           [settings.primaryInfusion]: primaryCount,
           [settings.secondaryInfusion]: secondaryCount
         };
-        if (!best || characterLT(best, temp)) {
-          best = temp;
+        if (!best || characterLT(best, testCharacter)) {
+          best = testCharacter;
         }
       }
+
       primaryCount--;
       secondaryCount++;
     }
+
     if (best) {
       insertCharacter(best);
     }
@@ -694,13 +721,13 @@ applyInfusions['SecondaryNoDuplicates'] = function (character) {
 };
 
 let uniqueIDCounter = 0;
-function insertCharacter (character) {
-  const { settings } = character;
+function insertCharacter(character) {
+  const { settings, attributes, valid } = character;
 
   if (
-    !character.valid
+    !valid
     || (worstScore
-      && worstScore > character.attributes[settings.rankby])
+      && worstScore > attributes[settings.rankby])
   ) {
     return;
   }
@@ -734,11 +761,14 @@ function insertCharacter (character) {
       worstScore = list[list.length - 1].attributes[settings.rankby];
     }
   }
+
   isChanged = true;
 }
 
-// returns true if B is better than A
-export function characterLT (a, b) {
+/* eslint-disable unicorn/consistent-destructuring */
+
+// returns true if B is better than a
+export function characterLT(a, b) {
   const { settings } = a;
 
   // if (!a.valid && b.valid) {
@@ -752,7 +782,7 @@ export function characterLT (a, b) {
   if (a.attributes[settings.rankby] === b.attributes[settings.rankby]) {
     let sumA = 0;
     let sumB = 0;
-    for (const attribute of Attributes.PRIMARY.concat(Attributes.SECONDARY)) {
+    for (const attribute of [...Attributes.PRIMARY, ...Attributes.SECONDARY]) {
       sumA += a.attributes[attribute] || 0;
       sumB += b.attributes[attribute] || 0;
     }
@@ -762,6 +792,8 @@ export function characterLT (a, b) {
 
   return a.attributes[settings.rankby] < b.attributes[settings.rankby];
 }
+
+/* eslint-enable unicorn/consistent-destructuring */
 
 /**
  * Rounds, tie-breaking exact halves to the nearest even integer. Apparently used by GW2
@@ -777,8 +809,10 @@ const roundEven = number => {
     if (floor % 2 === 0) {
       return floor;
     }
+
     return floor + 1;
   }
+
   return Math.round(number);
 };
 
@@ -788,7 +822,7 @@ const roundEven = number => {
  *
  * @param {Object} _character
  */
-export function updateAttributes (_character) {
+export function updateAttributes(_character) {
   const multipliers = _character.settings.modifiers['multiplier'];
   _character.valid = true;
 
@@ -810,7 +844,7 @@ export function updateAttributes (_character) {
  * @param {Object} _character
  * @param {boolean} [skipValidation] - skips the validation check if true
  */
-function updateAttributesFast (_character, skipValidation = false) {
+function updateAttributesFast(_character, skipValidation = false) {
   const { settings } = _character;
   const multipliers = settings.modifiers['multiplier'];
   _character.valid = true;
@@ -828,13 +862,14 @@ function updateAttributesFast (_character, skipValidation = false) {
 
       // cache condi result based on cdmg and expertise
       let condiDamageScore = 0;
-      if (settings.relevantConditions.length) {
-        const CONDI_CACHE_ID = attributes['Expertise'] + attributes['Condition Damage'] * 10000;
+      if (settings.relevantConditions.length > 0) {
+        const CONDI_CACHE_ID = attributes['Expertise'] + (attributes['Condition Damage'] * 10000);
         condiDamageScore
           = settings.condiResultCache.get(CONDI_CACHE_ID)
             || calcCondi(_character, multipliers, settings.relevantConditions);
         settings.condiResultCache.set(CONDI_CACHE_ID, condiDamageScore);
       }
+
       attributes['Damage'] = powerDamageScore + condiDamageScore;
       break;
     case 'Survivability':
@@ -845,27 +880,28 @@ function updateAttributesFast (_character, skipValidation = false) {
       break;
       // no default
   }
+
   return true;
 }
 
-function calcStats (_character) {
-  _character.attributes = Object.assign({}, _character.baseAttributes);
-  const { attributes } = _character;
+function calcStats(_character) {
+  _character.attributes = { ..._character.baseAttributes };
+  const { attributes, baseAttributes, settings } = _character;
 
-  for (const [attribute, conversion] of _character.settings.modifiers['convert']) {
+  for (const [attribute, conversion] of settings.modifiers['convert']) {
     for (const [source, percent] of conversion) {
-      attributes[attribute] += roundEven(_character.baseAttributes[source] * percent);
+      attributes[attribute] += roundEven(baseAttributes[source] * percent);
     }
   }
 
-  for (const [attribute, bonus] of _character.settings.modifiers['buff']) {
+  for (const [attribute, bonus] of settings.modifiers['buff']) {
     attributes[attribute] = (attributes[attribute] || 0) + bonus;
   }
 
   attributes['Boon Duration'] += attributes['Concentration'] / 15;
 }
 
-function checkInvalid (_character) {
+function checkInvalid(_character) {
   const { settings, attributes } = _character;
 
   const invalid
@@ -876,11 +912,12 @@ function checkInvalid (_character) {
   if (invalid) {
     _character.valid = false;
   }
+
   return invalid;
 }
 
-function calcPower (_character, multipliers) {
-  const { attributes } = _character;
+function calcPower(_character, multipliers) {
+  const { attributes, settings } = _character;
 
   attributes['Critical Chance'] += (attributes['Precision'] - 1000) / 21;
   attributes['Critical Damage'] += attributes['Ferocity'] / 15;
@@ -888,18 +925,18 @@ function calcPower (_character, multipliers) {
   const critDmg = attributes['Critical Damage'] / 100 * multipliers['Critical Damage'];
   const critChance = Math.min(attributes['Critical Chance'] / 100, 1);
 
-  attributes['Effective Power'] = attributes['Power'] * (1 + critChance * (critDmg - 1))
+  attributes['Effective Power'] = attributes['Power'] * (1 + (critChance * (critDmg - 1)))
     * multipliers['Effective Power'];
 
-  const damage = _character.settings.distribution['Power']
+  const damage = settings.distribution['Power']
     * attributes['Effective Power'];
   attributes['Power DPS'] = damage;
 
   return damage;
 }
 
-function calcCondi (_character, multipliers, relevantConditions) {
-  const { attributes } = _character;
+function calcCondi(_character, multipliers, relevantConditions) {
+  const { attributes, settings } = _character;
 
   attributes['Condition Duration'] += attributes['Expertise'] / 15;
   let condiDamageScore = 0;
@@ -913,7 +950,7 @@ function calcCondi (_character, multipliers, relevantConditions) {
     const duration = 1 + Math.min(((attributes[`${condition} Duration`] || 0)
         + attributes['Condition Duration']) / 100, 1);
 
-    const stacks = _character.settings.distribution[condition]
+    const stacks = settings.distribution[condition]
       * duration;
     attributes[`${condition} Stacks`] = stacks;
 
@@ -923,10 +960,11 @@ function calcCondi (_character, multipliers, relevantConditions) {
 
     condiDamageScore += damage;
   }
+
   return condiDamageScore;
 }
 
-function calcSurvivability (_character, multipliers) {
+function calcSurvivability(_character, multipliers) {
   const { attributes } = _character;
 
   attributes['Armor'] += attributes['Toughness'];
@@ -937,26 +975,27 @@ function calcSurvivability (_character, multipliers) {
   attributes['Survivability'] = attributes['Effective Health'] / 1967;
 }
 
-function calcHealing (_character, multipliers) {
-  const { attributes } = _character;
+function calcHealing(_character, multipliers) {
+  const { attributes, settings } = _character;
 
   // reasonably representative skill: druid celestial avatar 4 pulse
   // 390 base, 0.3 coefficient
-  attributes['Effective Healing'] = (attributes['Healing Power'] * 0.3 + 390)
+  attributes['Effective Healing'] = ((attributes['Healing Power'] * 0.3) + 390)
       * multipliers['Effective Healing'];
   if (
     Object.prototype.hasOwnProperty.call(
-      _character.settings.modifiers,
+      settings.modifiers,
       'bountiful-maintenance-oil'
     )
   ) {
     const bonus
-      = ((attributes['Healing Power'] || 0) * 0.6) / 10000
-      + ((attributes['Concentration'] || 0) * 0.8) / 10000;
+      = ((attributes['Healing Power'] || 0) * 0.6 / 10000)
+      + ((attributes['Concentration'] || 0) * 0.8 / 10000);
     if (bonus) {
-      attributes['Effective Healing'] *= 1.0 + bonus;
+      attributes['Effective Healing'] *= 1 + bonus;
     }
   }
+
   attributes['Healing'] = attributes['Effective Healing'];
 }
 
@@ -968,7 +1007,7 @@ function calcHealing (_character, multipliers) {
  * @param {Object} character
  * @returns {Object} character
  */
-export function clone (character) {
+export function clone(character) {
   return {
     settings: character.settings, // passed by reference
     attributes: character.attributes, // passed by reference
@@ -976,7 +1015,7 @@ export function clone (character) {
     gearStats: character.gearStats, // passed by reference
     valid: character.valid,
 
-    baseAttributes: Object.assign({}, character.baseAttributes),
-    infusions: Object.assign({}, character.infusions)
+    baseAttributes: { ...character.baseAttributes },
+    infusions: { ...character.infusions }
   };
 }

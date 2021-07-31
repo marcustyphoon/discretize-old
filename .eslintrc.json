@@ -7,39 +7,65 @@
     "ignorePatterns": [
         "gulpfile.js"
     ],
-    "extends": "semistandard",
+    "extends": ["xo-space/browser", "plugin:unicorn/recommended"],
     "rules": {
-        "padded-blocks": "warn",
+        // temp
+        "comma-dangle": "off",
+        "capitalized-comments": "off",
+
+
+
         "dot-notation": "off",
-        "no-case-declarations": "off",
+        "object-curly-spacing": ["warn", "always"],
+        "linebreak-style": "off",
+        "no-alert": "off",
 
-        "no-unused-vars": "warn",
-        "operator-linebreak": [
-            "warn",
-            "before"
-        ],
-        "max-len": [
-          "warn",
-          { 
-              "code": 100,
-              "ignoreComments": true
-          }
-      ],
-
-        "no-lonely-if": "warn",
-        "radix": "warn",
-        "default-case": "warn",
-        "no-param-reassign": [
-            "warn", 
-            { 
-                "props": false 
+        // from standard
+        "indent": [
+            "error", 2, {
+                "SwitchCase": 1,
+                "ignoredNodes": ["TemplateLiteral *"],
+                "offsetTernaryExpressions": true
             }
         ],
-        "no-else-return": "warn",
-        "no-shadow": "warn",
-        "consistent-return": "warn",
-        "object-shorthand": "warn",
-        "guard-for-in": "warn",
-        "no-underscore-dangle": "warn"
+
+        "unicorn/filename-case": "off",
+        "unicorn/consistent-function-scoping": "off",
+        "unicorn/numeric-separators-style": "off"
+
     }
+    // "rules": {
+    //     "padded-blocks": "warn",
+    //     "dot-notation": "off",
+    //     "no-case-declarations": "off",
+
+    //     "no-unused-vars": "warn",
+    //     "operator-linebreak": [
+    //         "warn",
+    //         "before"
+    //     ],
+    //     "max-len": [
+    //       "warn",
+    //       { 
+    //           "code": 100,
+    //           "ignoreComments": true
+    //       }
+    //   ],
+
+    //     "no-lonely-if": "warn",
+    //     "radix": "warn",
+    //     "default-case": "warn",
+    //     "no-param-reassign": [
+    //         "warn", 
+    //         { 
+    //             "props": false 
+    //         }
+    //     ],
+    //     "no-else-return": "warn",
+    //     "no-shadow": "warn",
+    //     "consistent-return": "warn",
+    //     "object-shorthand": "warn",
+    //     "guard-for-in": "warn",
+    //     "no-underscore-dangle": "warn"
+    // }
 }
