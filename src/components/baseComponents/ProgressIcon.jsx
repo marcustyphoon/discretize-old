@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import EqualizerRoundedIcon from '@material-ui/icons/EqualizerRounded';
+import EqualizerRoundedIcon from '@mui/icons-material/EqualizerRounded';
 import { getControl } from '../../state/gearOptimizerSlice';
 import CircularProgressWithLabel from './CircularProgressWithLabel';
 

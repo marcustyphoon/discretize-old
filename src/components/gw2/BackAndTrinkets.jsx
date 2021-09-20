@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { withStyles, Grid, Typography } from '@mui/material';
 import classNames from 'classnames';
 import { Item } from 'gw2-ui-bulk';
 import { resolveBackAndTrinkets } from '../../utils/map-gw2-ids';

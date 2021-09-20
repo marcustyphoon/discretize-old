@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
   withStyles,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Attribute } from 'gw2-ui-bulk';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';

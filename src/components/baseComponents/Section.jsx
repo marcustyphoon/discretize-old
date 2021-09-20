@@ -1,6 +1,6 @@
-import { Box, Divider, Grid, Paper, Typography, withStyles } from '@material-ui/core';
+import { Box, Divider, Grid, Paper, Typography, withStyles } from '@mui/material';
 import React from 'react';
-import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 
 const styles = (theme) => ({
   root: {

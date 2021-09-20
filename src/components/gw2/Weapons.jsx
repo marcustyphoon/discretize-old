@@ -1,4 +1,4 @@
-import { Icon, List, ListItem, ListItemText, withStyles } from '@material-ui/core';
+import { Icon, List, ListItem, ListItemText, withStyles } from '@mui/material';
 import { Item } from 'gw2-ui-bulk';
 import React from 'react';
 import TextDivider from '../baseComponents/TextDivider';

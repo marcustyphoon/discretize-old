@@ -1,5 +1,5 @@
-import { Grid, TextField, withStyles } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Grid, TextField, withStyles } from '@mui/material';
+import Autocomplete from '@mui/lab/Autocomplete';
 import { Item } from 'gw2-ui-bulk';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';

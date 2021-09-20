@@ -1,19 +1,10 @@
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { Link, Typography, Alert as MuiAlert } from '@mui/material';
 import * as React from 'react';
-
-import { Link, Typography, withStyles } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import GearOptimizer from '../components/GearOptimizer';
 import withLayout from '../hocs/withLayout';
 
-const styles = (theme) => ({
-  headline: {
-    paddingBottom: theme.spacing(2),
-  },
-});
-
 // markup
-const IndexPage = ({ classes }) => {
+const IndexPage = () => {
   return (
     <>
       <MuiAlert elevation={6} variant="filled" severity="warning">
@@ -31,12 +22,11 @@ const IndexPage = ({ classes }) => {
         </Link>
         .
       </MuiAlert>
-      <Typography variant="h2" className={classes.headline}>
+      <Typography variant="h2" sx={{ paddingBottom: 2 }}>
         Gear Optimizer
       </Typography>
-      <GearOptimizer />
     </>
   );
 };
 
-export default withLayout({ disableContainer: false })(withStyles(styles)(IndexPage));
+export default withLayout({ disableContainer: false })(IndexPage);

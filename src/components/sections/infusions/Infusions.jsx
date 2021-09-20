@@ -1,12 +1,4 @@
-import {
-  FormControl,
-  Grid,
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  withStyles,
-} from '@material-ui/core';
+import { FormControl, Grid, Input, InputLabel, MenuItem, Select, withStyles } from '@mui/material';
 import { Item } from 'gw2-ui-bulk';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';

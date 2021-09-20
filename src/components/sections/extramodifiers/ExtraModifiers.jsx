@@ -1,4 +1,4 @@
-import { TextField, withStyles } from '@material-ui/core';
+import { TextField, withStyles } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeExtraModifiers, getExtraModifiers } from '../../../state/slices/extraModifiers';

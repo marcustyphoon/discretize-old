@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, withStyles } from '@material-ui/core';
+import { List, ListItem, ListItemText, withStyles } from '@mui/material';
 import { Item } from 'gw2-ui-bulk';
 import React from 'react';
 import { resolveArmor } from '../../utils/map-gw2-ids';

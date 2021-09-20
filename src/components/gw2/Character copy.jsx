@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography, withStyles } from '@material-ui/core';
+import { Grid, Paper, Typography, withStyles } from '@mui/material';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import React from 'react';
 import Armor from './Armor';

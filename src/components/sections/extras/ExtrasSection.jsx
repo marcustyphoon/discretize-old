@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { ConsumableEffect, Item } from 'gw2-ui-bulk';
 import Section from '../../baseComponents/Section';
 import GW2Select from './GW2Select';

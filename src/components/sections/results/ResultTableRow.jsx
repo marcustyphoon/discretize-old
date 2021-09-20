@@ -1,6 +1,6 @@
-import { Typography } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import { Typography } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { changeSelectedCharacter } from '../../../state/gearOptimizerSlice';

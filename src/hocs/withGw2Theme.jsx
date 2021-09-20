@@ -1,5 +1,5 @@
 import React from 'react';
-import { MuiThemeProvider, withTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, StyledEngineProvider, withTheme } from '@mui/material/styles';
 
 import gw2Styles from '../styles/gw2';
 
@@ -47,9 +47,11 @@ export default (props) => (Component) =>
     const gw2Theme = alias && (!theme || alias !== theme.name) && gw2Styles[alias];
 
     return gw2Theme ? (
-      <MuiThemeProvider theme={gw2Theme}>
-        <Component {...rest} />
-      </MuiThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <MuiThemeProvider theme={gw2Theme}>
+          <Component {...rest} />
+        </MuiThemeProvider>
+      </StyledEngineProvider>
     ) : (
       <Component {...rest} />
     );

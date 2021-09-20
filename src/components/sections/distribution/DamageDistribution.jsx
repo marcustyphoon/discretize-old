@@ -7,7 +7,7 @@ import {
   InputLabel,
   Typography,
   withStyles,
-} from '@material-ui/core';
+} from '@mui/material';
 import classNames from 'classnames';
 import { Attribute, Condition } from 'gw2-ui-bulk';
 import debounce from 'lodash.debounce';
@@ -16,7 +16,7 @@ import Nouislider from 'nouislider-react';
 import 'nouislider/distribute/nouislider.css';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from '@mui/lab/Alert';
 import {
   changeAllDistributionsOld,
   changeDistributionNew,

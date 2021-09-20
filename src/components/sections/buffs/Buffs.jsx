@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, FormLabel, Grid, Typography, withStyles } from '@material-ui/core';
+import { FormControl, FormGroup, FormLabel, Grid, Typography, withStyles } from '@mui/material';
 import { Boon, CommonEffect, Condition, Skill, Trait } from 'gw2-ui-bulk';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeBuff, getBuffs } from '../../../state/slices/buffs';

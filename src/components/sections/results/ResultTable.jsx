@@ -1,8 +1,8 @@
-import { Box, withStyles } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+import { Box, withStyles } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getList, getSelectedCharacter } from '../../../state/gearOptimizerSlice';

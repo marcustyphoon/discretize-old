@@ -1,4 +1,4 @@
-import { Chip, withStyles } from '@material-ui/core';
+import { Chip, withStyles } from '@mui/material';
 import { Profession } from 'gw2-ui-bulk';
 import React from 'react';
 import { firstUppercase } from '../../utils/usefulFunctions';

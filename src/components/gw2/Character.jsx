@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, useMediaQuery, useTheme, withStyles } from '@material-ui/core';
+import { Box, Paper, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import React from 'react';
 import Armor from './Armor';

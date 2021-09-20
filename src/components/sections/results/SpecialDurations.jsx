@@ -1,4 +1,4 @@
-import { Table, TableCell, TableRow, TableBody, withStyles, Typography } from '@material-ui/core';
+import { Table, TableCell, TableRow, TableBody, withStyles, Typography } from '@mui/material';
 import { Boon, Condition } from 'gw2-ui-bulk';
 import React from 'react';
 import { Condition as ConditionList } from '../../../utils/gw2-data';

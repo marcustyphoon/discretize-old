@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, Chip, Typography } from '@material-ui/core';
-import Cancel from '@material-ui/icons/Cancel';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
+import { Box, Button, Chip, Typography } from '@mui/material';
+import Cancel from '@mui/icons-material/Cancel';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import classNames from 'classnames';
 import ProgressIcon from '../../baseComponents/ProgressIcon';
 import { changeControl, getControl, setModifiers } from '../../../state/gearOptimizerSlice';

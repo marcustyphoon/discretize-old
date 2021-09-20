@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, Grid, Input, InputAdornment, InputLabel } from '@material-ui/core';
+import { FormControl, Grid, Input, InputAdornment, InputLabel } from '@mui/material';
 import { Attribute, Item } from 'gw2-ui-bulk';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeAR, changeOmnipotion, getAR, getOmniPotion } from '../../../state/slices/omnipotion';

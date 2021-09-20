@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel, Switch } from '@mui/material';
 import Section from '../../baseComponents/Section';
 import DamageDistribution from './DamageDistribution';
 import {

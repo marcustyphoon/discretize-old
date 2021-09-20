@@ -1,8 +1,8 @@
-import { Chip } from '@material-ui/core';
-import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
-import { withStyles } from '@material-ui/core/styles';
+import { Chip } from '@mui/material';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import { withStyles } from '@mui/material/styles';
 import { Profession } from 'gw2-ui-bulk';
 import React from 'react';
 import { useDispatch } from 'react-redux';

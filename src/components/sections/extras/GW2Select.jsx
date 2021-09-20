@@ -9,7 +9,7 @@ import {
   Select,
   Typography,
   withStyles,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Item } from 'gw2-ui-bulk';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeExtras, getExtra } from '../../../state/slices/extras';

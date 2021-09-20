@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography, withStyles } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, Typography, withStyles } from '@mui/material';
 import React from 'react';
 
 const styles = (theme) => ({

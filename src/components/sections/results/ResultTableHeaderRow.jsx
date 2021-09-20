@@ -1,6 +1,6 @@
 import React from 'react';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import { Item } from 'gw2-ui-bulk';
 import { useSelector } from 'react-redux';
 import { Slots } from '../../../utils/gw2-data';

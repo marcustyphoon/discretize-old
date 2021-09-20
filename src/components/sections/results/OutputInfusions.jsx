@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography, withStyles } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, Typography, withStyles } from '@mui/material';
 import { Item } from 'gw2-ui-bulk';
 import React from 'react';
 import { INFUSIONS } from '../../../utils/gw2-data';

@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select, withStyles } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select, withStyles } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeControl, getControl, getProfession } from '../../../state/gearOptimizerSlice';

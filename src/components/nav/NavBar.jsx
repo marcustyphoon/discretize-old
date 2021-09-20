@@ -11,9 +11,9 @@ import {
   Toolbar,
   Typography,
   withStyles,
-} from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import MenuIcon from '@material-ui/icons/Menu';
+} from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Profession } from 'gw2-ui-bulk';
 import { bindHover, bindMenu, usePopupState } from 'material-ui-popup-state/hooks';
 import Menu from 'material-ui-popup-state/HoverMenu';
@@ -93,7 +93,7 @@ const Navbar = ({ classes, data, buffPresets, prioritiesPresets, distributionPre
         <IconButton
           className={classes.githubIcon}
           href="https://github.com/discretize/discretize-gear-optimizer/tree/react-recode"
-        >
+          size="large">
           <GitHubIcon />
         </IconButton>
       </Box>
@@ -115,7 +115,7 @@ const Navbar = ({ classes, data, buffPresets, prioritiesPresets, distributionPre
               'aria-haspopup': 'true',
               onClick: handleDrawerOpen,
             }}
-          >
+            size="large">
             <MenuIcon />
           </IconButton>
         </Box>

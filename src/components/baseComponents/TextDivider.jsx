@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@mui/material';
 
 const styles = (theme) => ({
   root: {
