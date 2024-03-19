@@ -632,5 +632,3 @@ fn calc_healing(character: &mut Character) {
         attributes.get_a(Attribute::EffectiveHealing),
     );
 }
-
-// dummy change
