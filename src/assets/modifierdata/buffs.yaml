@@ -10,6 +10,7 @@
         attributes:
           Power: [30, buff]
           Condition Damage: [30, buff]
+          something that doesnt exist: [15, buff]
       type: Boon
 
     - id: fury
