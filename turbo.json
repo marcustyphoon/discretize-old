@@ -29,11 +29,9 @@
       "outputs": ["wasm_module/pkg/**", "wasm_module/target/**"]
     },
     "wasmCheck": {
-      "dependsOn": ["wasm"],
       "inputs": ["wasm_module/**", "!wasm_module/pkg/**", "!wasm_module/target/**"]
     },
     "wasmCheckAll": {
-      "dependsOn": ["wasm"],
       "inputs": ["wasm_module/**", "!wasm_module/pkg/**", "!wasm_module/target/**"]
     }
   }
