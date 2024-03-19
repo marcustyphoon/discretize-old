@@ -53,8 +53,8 @@ jobs:
           workspaces: wasm_module
         if: steps.rust-output-cache.outputs.cache-hit != 'true'
       - name: Compile Rust
-        run: pnpm turbo wasm
+        run: pnpm turbo wasm --color
         if: steps.rust-output-cache.outputs.cache-hit != 'true'
 
       - name: Run all tests
-        run: pnpm checkAll
+        run: pnpm checkAll --color
